@@ -1,39 +1,65 @@
 from sarif_utils import load_sarif, save_sarif
-from loaders import load_semgrep_rules
-from enrichers import enrich_rule, enrich_result
 
-INPUT = "semgrep.sarif"
-OUTPUT = "semgrep-enhanced.sarif"
+from taxonomy_builder import build_taxonomies
+
+from sarif_builder import (
+    update_rule,
+    update_result,
+    add_fixes,
+    add_relationship
+)
+
+from rule_mapper import map_rule
+
+INPUT="semgrep.sarif"
+
+OUTPUT="semgrep-enhanced.sarif"
 
 sarif = load_sarif(INPUT)
 
-mapping = load_semgrep_rules()
+run = sarif["runs"][0]
 
-driver = sarif["runs"][0]["tool"]["driver"]
+driver = run["tool"]["driver"]
 
-rules = {}
+driver["taxonomies"] = build_taxonomies()
 
-for r in driver.get("rules", []):
-    rules[r["id"]] = r
+rule_index = {}
 
-for result in sarif["runs"][0]["results"]:
+for rule in driver.get(
+    "rules",
+    []
+):
 
-    rid = result["ruleId"]
+    rule_index[rule["id"]] = rule
 
-    if rid not in mapping:
+for result in run["results"]:
+
+    meta = map_rule(
+        result["ruleId"]
+    )
+
+    if meta is None:
+
         continue
 
-    meta = mapping[rid]
-
-    severity, level = enrich_rule(
-        rules[rid],
+    update_rule(
+        rule_index[result["ruleId"]],
         meta
     )
 
-    enrich_result(
+    update_result(
         result,
-        meta["cvss"],
-        level
+        meta
+    )
+
+    add_fixes(
+        result,
+        meta
+    )
+
+    add_relationship(
+        rule_index[result["ruleId"]],
+        meta
     )
 
 save_sarif(
@@ -41,4 +67,4 @@ save_sarif(
     OUTPUT
 )
 
-print("SARIF Enhanced Successfully.")
+print("Enhanced Successfully")
