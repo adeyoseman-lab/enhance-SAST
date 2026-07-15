@@ -1,13 +1,23 @@
 {
-  "php.lang.security.eval-use.eval-use": {
-    "cwe": "CWE-95",
-    "owasp": "A03",
-    "severity": "Critical"
-  },
-
   "javascript.lang.security.detect-child-process.detect-child-process": {
-    "cwe": "CWE-78",
-    "owasp": "A03",
-    "severity": "Critical"
+
+    "title":"Command Injection",
+
+    "cwe":"CWE-78",
+
+    "owasp":"A03:2021 Injection",
+
+    "cvss":9.8,
+
+    "description":"Unsanitized user input reaches child_process.exec().",
+
+    "impact":"An attacker may execute arbitrary operating system commands.",
+
+    "fix":"Use execFile() or spawn() with allow-listed arguments.",
+
+    "references":[
+      "https://owasp.org/Top10/A03_2021-Injection/",
+      "https://cwe.mitre.org/data/definitions/78.html"
+    ]
   }
 }
