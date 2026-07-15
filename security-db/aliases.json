@@ -1,0 +1,9 @@
+{
+  "javascript.lang.security.detect-child-process.detect-child-process":"CWE-78",
+
+  "javascript.lang.security.audit.detect-child-process":"CWE-78",
+
+  "javascript.lang.security.exec-use.exec-use":"CWE-78",
+
+  "javascript.lang.security.command-injection":"CWE-78"
+}
