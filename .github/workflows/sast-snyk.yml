@@ -1,0 +1,65 @@
+name: SAST - Snyk
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+
+  snyk:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Snyk
+
+        run: |
+
+          npm install -g snyk
+
+      - name: Authenticate
+
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+        run: |
+
+          snyk auth $SNYK_TOKEN
+
+      - name: Test Code
+
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+        run: |
+
+          snyk code test \
+            --sarif-file-output=snyk.sarif || true
+
+      - name: Enhance SARIF
+
+        run: |
+
+          python scripts/enhance_snyk.py
+
+      - name: Upload
+
+        uses: github/codeql-action/upload-sarif@v3
+
+        with:
+
+          sarif_file: snyk-enhanced.sarif
