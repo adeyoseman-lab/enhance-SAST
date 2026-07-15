@@ -1,0 +1,14 @@
+{
+  "CWE-79": {
+    "title": "Cross Site Scripting",
+    "severity": "Medium"
+  },
+  "CWE-89": {
+    "title": "SQL Injection",
+    "severity": "Critical"
+  },
+  "CWE-78": {
+    "title": "Command Injection",
+    "severity": "Critical"
+  }
+}

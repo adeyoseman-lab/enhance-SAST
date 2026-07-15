@@ -1,0 +1,13 @@
+{
+  "php.lang.security.eval-use.eval-use": {
+    "cwe": "CWE-95",
+    "owasp": "A03",
+    "severity": "Critical"
+  },
+
+  "javascript.lang.security.detect-child-process.detect-child-process": {
+    "cwe": "CWE-78",
+    "owasp": "A03",
+    "severity": "Critical"
+  }
+}

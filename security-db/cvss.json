@@ -1,0 +1,4 @@
+{
+  "CAPEC-66": "SQL Injection",
+  "CAPEC-242": "Code Injection"
+}
